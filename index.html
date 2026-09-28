@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GaloUI - Componentes visuales</title>
+
+    <!-- 1. Estilos de la librería -->
+    <link rel="stylesheet" href="css/componente.css">
+    <link rel="stylesheet" href="css/principal.css">
+</head>
+<body>
+    <main>
+        <header>
+            <div>
+                <h1>GaloUI</h1>
+                <p>Notificaciones, modales, acordeones y pestañas. Solo HTML, CSS y JS.</p>
+            </div>
+            <button class="btn btn-ghost" onclick="cambiarTema()">Cambiar tema</button>
+        </header>
+
+        <!-- TOAST -->
+    <section class="card">
+        <h2>Notificaciones toast</h2>
+        <div class="row">
+            <button class="btn btn-success" onclick="mostrarToast('success')">Éxito</button>
+            <button class="btn btn-error" onclick="mostrarToast('error')">Error</button>
+            <button class="btn btn-info" onclick="mostrarToast('info')">Información</button>
+            <button class="btn btn-warning" onclick="mostrarToast('warning')">Aviso</button>
+            <select id="posicion" aria-label="Posición">
+                <option value="top-right">Arriba derecha</option>
+                <option value="top-left">Arriba izquierda</option>
+                <option value="bottom-right">Abajo derecha</option>
+                <option value="bottom-left">Abajo izquierda</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <section class="card">
+        <h2>Modal de confirmación</h2>
+        <button class="btn btn-primary" onclick="abrirModal()">Eliminar cuenta</button>
+    </section>
+
+    <!-- ACORDEÓN: con data-single solo se abre un panel a la vez -->
+    <section class="card">
+        <h2>Acordeón</h2>
+        <div data-single>
+            <div class="acc-item open">
+                <button class="acc-head" aria-expanded="true">¿Necesito instalar algo?</button>
+                <div class="acc-panel"><div><p>No. Copia <code>componente.css</code> y <code>componente.js</code> a tu proyecto.</p></div></div>
+            </div>
+            <div class="acc-item">
+                <button class="acc-head" aria-expanded="false">¿Funciona en celulares?</button>
+                <div class="acc-panel"><div><p>Sí. Los componentes se adaptan a pantallas pequeñas.</p></div></div>
+            </div>
+            <div class="acc-item">
+                <button class="acc-head" aria-expanded="false">¿Se puede cambiar el color?</button>
+                <div class="acc-panel"><div><p>Sí. Edita las variables al inicio del CSS, como <code>--accent</code>.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PESTAÑAS: data-tab de cada botón = id de su panel -->
+    <section class="card">
+        <h2>Pestañas</h2>
+        <div class="tabs">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="instalar">Instalar</button>
+                <button class="tab-btn" data-tab="usar">Usar</button>
+                <button class="tab-btn" data-tab="opciones">Opciones</button>
+            </div>
+            <div class="tab-panel active" id="instalar">Enlaza el CSS en el <code>&lt;head&gt;</code> y el JS al final del <code>&lt;body&gt;</code>.</div>
+            <div class="tab-panel" id="usar">Llama <code>Toast.success('Guardado')</code> o <code>Modal.open({ title: '...' })</code>.</div>
+            <div class="tab-panel" id="opciones">Toast acepta <code>message</code>, <code>title</code>, <code>type</code>, <code>duration</code> y <code>position</code>.</div>
+        </div>
+    </section>
+    </main>
+
+<!-- 2. Script de la librería -->
+<script src="js/componente.js"></script>
+<script src="js/principal.js"></script>
+</body>
+</html>

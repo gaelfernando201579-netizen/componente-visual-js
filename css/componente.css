@@ -1,0 +1,263 @@
+/* GaloUI - estilos (CSS puro, sin frameworks) */
+
+/* ---------- Colores: Paleta FC Barcelona (Blaugrana & Senyera Gold) ---------- */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --ink: #0a1128;
+  --muted: #56617a;
+  --line: #d8dfed;
+
+  /* Identidad FC Barcelona */
+  --fcb-blau: #004d98;
+  --fcb-grana: #a50044;
+  --fcb-gold: #edbb00;
+
+  /* Variables del sistema */
+  --accent: #004d98;
+  --on-accent: #ffffff;
+  --ok: #059669;
+  --err: #a50044;
+  --info: #004d98;
+  --warn: #edbb00;
+  --on-warn: #2c1f00;
+}
+
+/* Tema oscuro */
+[data-theme="dark"] {
+  --bg: #070d1e;
+  --surface: #0f1933;
+  --ink: #f0f4fc;
+  --muted: #8b9bb4;
+  --line: #1c2b50;
+
+  --accent: #1e70e4;
+  --on-accent: #ffffff;
+  --ok: #10b981;
+  --err: #e01e5a;
+  --info: #1e70e4;
+  --warn: #ffc72c;
+  --on-warn: #2c1f00;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  font: inherit;
+  font-weight: 700;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s, filter 0.2s;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: scale(0.96); }
+
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { box-shadow: 0 4px 14px rgba(0, 77, 152, 0.35); }
+.btn-ghost   { background: none; border-color: var(--line); color: var(--ink); }
+.btn-ghost:hover { background: rgba(0, 77, 152, 0.08); }
+.btn-success { background: var(--ok);   color: #fff; }
+.btn-success:hover { box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35); }
+.btn-error   { background: var(--err);  color: #fff; }
+.btn-error:hover { box-shadow: 0 4px 14px rgba(165, 0, 68, 0.35); }
+.btn-info    { background: var(--info); color: #fff; }
+.btn-info:hover { box-shadow: 0 4px 14px rgba(0, 77, 152, 0.35); }
+.btn-warning { background: var(--warn); color: var(--on-warn); }
+.btn-warning:hover { box-shadow: 0 4px 14px rgba(237, 187, 0, 0.35); }
+
+/* ---------- Toast ---------- */
+
+/* Contenedor: uno por cada esquina de la pantalla */
+.toast-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  z-index: 9999;
+  pointer-events: none; /* no bloquea clics en la página */
+}
+/* --x es desde dónde entra el toast (derecha o izquierda) */
+.toast-container[data-pos="top-right"]    { top: 0;    right: 0; --x: 110%; }
+.toast-container[data-pos="top-left"]     { top: 0;    left: 0;  --x: -110%; }
+.toast-container[data-pos="bottom-right"] { bottom: 0; right: 0; --x: 110%;  flex-direction: column-reverse; }
+.toast-container[data-pos="bottom-left"]  { bottom: 0; left: 0;  --x: -110%; flex-direction: column-reverse; }
+
+/* Cada notificación. --c es su color según el tipo */
+.toast {
+  --c: var(--info);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 300px;
+  padding: 14px 12px 17px 14px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 20, 60, 0.16);
+  pointer-events: auto;
+  animation: toast-in 0.4s ease-out;
+}
+.toast.out { animation: toast-out 0.25s forwards; }
+
+.toast-success { --c: var(--ok); }
+.toast-error   { --c: var(--err); }
+.toast-warning { --c: var(--warn); }
+
+.toast-icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--c);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+}
+.toast-warning .toast-icon { color: var(--on-warn); }
+
+.toast-body { flex: 1; font-size: 14px; line-height: 1.45; }
+.toast-title { display: block; font-weight: 800; }
+.toast-title:empty { display: none; } /* sin título, no ocupa espacio */
+
+.toast-close {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.toast-close:hover { color: var(--ink); }
+
+/* Barra de progreso: además sirve de temporizador (ver el JS) */
+.toast-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--c);
+  transform-origin: left;
+  animation: toast-bar linear forwards; /* la duración la pone el JS */
+  animation-duration: var(--duracion);
+}
+.toast:hover .toast-bar { animation-play-state: paused; }
+
+@keyframes toast-in  { from { transform: translateX(var(--x, 110%)); opacity: 0; } }
+@keyframes toast-out { to   { transform: scale(0.9); opacity: 0; } }
+@keyframes toast-bar { to   { transform: scaleX(0); } }
+
+/* ---------- Modal ---------- */
+
+/* Fondo oscuro que cubre toda la pantalla; invisible hasta tener .open */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 9000;
+  background: rgba(4, 10, 26, 0.68);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+.modal-overlay.open { opacity: 1; visibility: visible; }
+
+.modal {
+  width: min(440px, 100%);
+  padding: 28px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 10, 40, 0.25);
+  transform: translateY(24px);
+  transition: transform 0.3s;
+}
+.modal-overlay.open .modal { transform: none; }
+
+.modal-title { margin: 0 0 8px; font-size: 20px; }
+.modal-text { margin: 0 0 24px; color: var(--muted); line-height: 1.5; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ---------- Acordeón ---------- */
+.acc-item { border-bottom: 1px solid var(--line); }
+
+.acc-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 4px;
+  background: none;
+  border: 0;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.acc-head:hover { color: var(--accent); }
+.acc-head::after { content: "+"; color: var(--accent); transition: transform 0.3s; font-size: 18px; }
+.acc-item.open .acc-head::after { transform: rotate(135deg); } /* la + se vuelve × */
+
+/* Truco: la fila del grid pasa de 0fr a 1fr para animar la altura */
+.acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s;
+}
+.acc-item.open .acc-panel { grid-template-rows: 1fr; }
+.acc-panel > div { overflow: hidden; color: var(--muted); line-height: 1.6; }
+.acc-panel p { margin: 0 0 16px; }
+
+/* ---------- Pestañas ---------- */
+.tabs-nav {
+  display: inline-flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+.tab-btn {
+  padding: 8px 16px;
+  background: none;
+  border: 0;
+  border-radius: 9px;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tab-panel { display: none; color: var(--muted); line-height: 1.6; }
+.tab-panel.active { display: block; }
+
+/* Accesibilidad: sin animaciones largas para quien lo prefiera */
+@media (prefers-reduced-motion: reduce) {
+  .toast, .toast.out { animation-duration: 0.01s; }
+  .modal, .modal-overlay, .acc-panel { transition: none; }
+}
